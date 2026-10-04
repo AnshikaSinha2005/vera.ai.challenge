@@ -133,7 +133,7 @@ def _hook(category, merchant, trigger):
     if k=="renewal_due":
         return f"Pro plan has {p.get('days_remaining')} days remaining"
     if k=="cde_opportunity":
-        item=_digest_item(category,p.get("digest_item_id"))
+        item=_digest_item(category, p.get("top_item_id") or p.get("digest_item_id") or p.get("alert_id"))
         return f"{item.get('title','training opportunity')} ({p.get('credits','?')} credits; {p.get('fee','fee')})"
     if k in CUSTOMER_KINDS:
         if p.get("due_date"): return f"due {p['due_date']}"
@@ -300,3 +300,4 @@ def compose_template(category: dict, trigger: dict, merchant: dict, customer: Op
     out=compose(category,merchant,trigger,customer)
     return {**out, "template_name":"vera_engagement_v1",
             "template_params":[_name(merchant), out["body"][:180]]}
+
